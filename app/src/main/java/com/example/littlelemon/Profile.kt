@@ -3,14 +3,11 @@ package com.example.littlelemon
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.Toast
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -22,15 +19,12 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -39,44 +33,24 @@ import com.example.littlelemon.ui.theme.LittleLemonYellow
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun OnBoarding(
-    edit: SharedPreferences.Editor,
+fun Profile(
+    edit: SharedPreferences,
     navController: NavHostController,
-    applicationContext: Context
 ) {
 
 
-    var firstName by remember {
-        mutableStateOf("")
-    }
+    val firstName=edit.getString("firstName","")
+    val lastName=edit.getString("lastName","")
+    val email=edit.getString("email","")
 
-    var lastName by remember {
-        mutableStateOf("")
-    }
-
-    var email by remember {
-        mutableStateOf("")
-    }
 
     Scaffold(topBar = { Header()}) {
         Column(
             modifier= Modifier.padding(it)
         ) {
 
-            Card(
-                modifier = Modifier.fillMaxWidth(),
-                colors = CardDefaults.cardColors(containerColor = LittleLemonHero),
-                shape = RoundedCornerShape(1.dp)
-            ) {
-                Text(
-                    text = "Let's get to know you",
-                    fontSize = 25.sp,
-                    modifier= Modifier
-                        .padding(top = 40.dp, bottom = 40.dp)
-                        .align(Alignment.CenterHorizontally)
-                )
-            }
-            Card(colors =CardDefaults.cardColors(containerColor = Color.White),shape= RoundedCornerShape(1.dp)) {
+
+            Card(colors = CardDefaults.cardColors(containerColor = Color.White),shape= RoundedCornerShape(1.dp)) {
                 Text(
                     text = "Personal Information",
                     fontWeight = FontWeight.Bold,
@@ -86,10 +60,10 @@ fun OnBoarding(
                 )
 
                 OutlinedTextField(
-                    value = firstName,
+                    readOnly = true,
+                    value = firstName!!,
                     colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
                     onValueChange = {
-                        firstName = it
                     },
                     label = { Text(text = "First Name",color = Color.Black) },
                     modifier = Modifier
@@ -98,10 +72,11 @@ fun OnBoarding(
                 )
 
                 OutlinedTextField(
-                    value = lastName,
+                    readOnly = true,
+                    value = lastName!!,
                     colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
                     onValueChange = {
-                        lastName = it
+
                     },
                     label = { Text(text = "Last Name",color = Color.Black) },
                     modifier = Modifier
@@ -110,10 +85,11 @@ fun OnBoarding(
                 )
 
                 OutlinedTextField(
-                    value = email,
+                    readOnly = true,
+                    value = email!!,
                     colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
                     onValueChange = {
-                        email = it
+
                     },
                     label = { Text(text = "Email",color = Color.Black) },
                     modifier = Modifier
@@ -126,22 +102,13 @@ fun OnBoarding(
                 ) {
                     Button(
                         onClick = {
-                            if(!(firstName.isBlank()||lastName.isBlank()||email.isBlank())) {
-                                edit.putString("firstName", firstName)
-                                    .putString("lastName", lastName)
-                                    .putString("email", email)
-                                    .commit()
-                                Toast.makeText(applicationContext,"Successfully Registered!",Toast.LENGTH_LONG).show()
+                           edit.edit().clear().commit()
 
-                                navController.navigate(Home.route){
-                                    popUpTo(navController.graph.id){
-                                        inclusive=true
-                                    }
+                            navController.navigate(OnBoarding.route){
+                                popUpTo(navController.graph.id){
+                                    inclusive=true
                                 }
-
                             }
-                            else
-                                Toast.makeText(applicationContext,"Registration Unsuccessful,Please enter all data",Toast.LENGTH_LONG).show()
                         },
                         shape = RoundedCornerShape(10.dp),
                         colors = ButtonDefaults.buttonColors(containerColor = LittleLemonYellow),
@@ -149,30 +116,10 @@ fun OnBoarding(
                             .fillMaxWidth()
                             .padding(start = 10.dp, end = 10.dp, bottom = 30.dp)
                     ) {
-                        Text(text = "Register", color = Color.Black)
+                        Text(text = "Log Out", color = Color.Black)
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun Header(){
-    Card(modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(contentColor = Color.White, containerColor = Color.White),
-        shape = RoundedCornerShape(1.dp)
-    ) {
-        Column(
-            modifier=Modifier.fillMaxWidth(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(id = R.drawable.logo),
-                contentDescription ="logo.png",
-                modifier=Modifier.size(width = 200.dp, height = 80.dp)
-            )
         }
     }
 }
