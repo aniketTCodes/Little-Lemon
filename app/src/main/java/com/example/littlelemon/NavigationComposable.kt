@@ -27,7 +27,7 @@ fun NavigationComposable(
             OnBoarding(sharedPreferences.edit(),navController,applicationContext)
         }
         composable(Home.route){
-            Home(navController,sharedPreferences,applicationContext)
+            Home(navController,applicationContext)
         }
         composable(Profile.route){
             Profile(sharedPreferences,navController)
