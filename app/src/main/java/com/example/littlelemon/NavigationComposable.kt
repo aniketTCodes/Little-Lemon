@@ -12,22 +12,21 @@ import androidx.navigation.compose.composable
 fun NavigationComposable(
     navController: NavHostController,
     sharedPreferences: SharedPreferences,
-    applicationContext: Context
+    applicationContext: Context,
+    menuItems: List<MenuItem>
 ){
     Log.e("MainActivity","Inside Navigation Composable")
     val startDestination:String = if(sharedPreferences.contains("firstName")&&sharedPreferences.contains("lastName")&&sharedPreferences.contains("email")){
         Home.route
     }else
         OnBoarding.route
-
-
     Log.e("MainActivity","Start Destination $startDestination ${sharedPreferences.contains("firstName")&&sharedPreferences.contains("lastName")&&sharedPreferences.contains("email")}")
     NavHost(navController = navController, startDestination = startDestination ){
         composable(OnBoarding.route){
             OnBoarding(sharedPreferences.edit(),navController,applicationContext)
         }
         composable(Home.route){
-            Home(navController,applicationContext)
+            Home(navController,applicationContext,menuItems)
         }
         composable(Profile.route){
             Profile(sharedPreferences,navController)

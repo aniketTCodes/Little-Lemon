@@ -49,6 +49,9 @@ android {
 }
 
 dependencies {
+
+    implementation 'com.github.bumptech.glide:compose:1.0.0-alpha.1'
+    implementation 'androidx.compose.runtime:runtime-livedata'
     implementation 'androidx.room:room-runtime:2.4.3'
     kapt 'androidx.room:room-compiler:2.4.3'
     implementation 'io.ktor:ktor-client-android:2.1.3'

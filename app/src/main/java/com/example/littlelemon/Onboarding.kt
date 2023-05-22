@@ -11,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
@@ -28,9 +31,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
@@ -45,7 +52,7 @@ fun OnBoarding(
     applicationContext: Context
 ) {
 
-
+val focusManager= LocalFocusManager.current
     var firstName by remember {
         mutableStateOf("")
     }
@@ -84,42 +91,53 @@ fun OnBoarding(
                     color = Color.Black,
                     modifier = Modifier.padding(top = 60.dp, bottom = 40.dp, start = 10.dp)
                 )
+                LazyColumn() {
+                    item {
+                        OutlinedTextField(
+                            value = firstName,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
+                            onValueChange = {
+                                firstName = it
+                            },
+                            label = { Text(text = "First Name", color = Color.Black) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 10.dp, bottom = 30.dp, top = 20.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                            keyboardActions = KeyboardActions(
+                                onNext = {
+                                    focusManager.moveFocus(FocusDirection.Down)
+                                }
+                            )
+                        )
 
-                OutlinedTextField(
-                    value = firstName,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
-                    onValueChange = {
-                        firstName = it
-                    },
-                    label = { Text(text = "First Name",color = Color.Black) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp, bottom = 30.dp, top = 20.dp)
-                )
+                        OutlinedTextField(
+                            value = lastName,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
+                            onValueChange = {
+                                lastName = it
+                            },
+                            label = { Text(text = "Last Name", color = Color.Black) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 10.dp, bottom = 30.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                        )
 
-                OutlinedTextField(
-                    value = lastName,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
-                    onValueChange = {
-                        lastName = it
-                    },
-                    label = { Text(text = "Last Name",color = Color.Black) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp, bottom = 30.dp)
-                )
-
-                OutlinedTextField(
-                    value = email,
-                    colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
-                    onValueChange = {
-                        email = it
-                    },
-                    label = { Text(text = "Email",color = Color.Black) },
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = 10.dp, end = 10.dp, bottom = 30.dp)
-                )
+                        OutlinedTextField(
+                            value = email,
+                            colors = TextFieldDefaults.outlinedTextFieldColors(textColor = Color.Black),
+                            onValueChange = {
+                                email = it
+                            },
+                            label = { Text(text = "Email", color = Color.Black) },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 10.dp, end = 10.dp, bottom = 30.dp),
+                            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next)
+                        )
+                    }
+                }
                 Column(
                     verticalArrangement = Arrangement.Bottom,
                     modifier = Modifier.fillMaxSize()
